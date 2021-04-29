@@ -45,7 +45,7 @@ const isFormValid = () => {
     return (
         <div className="">
             <h1 className="auth__title">Registrar usuario</h1>
-            <form onSubmit={handleRegister}>
+            <form onSubmit={handleRegister} className="animate__animated animate__fadeIn animate__faster">
                 {
                     msgError &&
                     (<div className="auth__alert-error">

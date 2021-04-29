@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { login } from '../components/actions/auth';
 import { PrivateRoute } from './PrivateRoute';
 import { PublicRoute } from './PublicRoute';
+import { startLoadingNotes } from '../components/actions/notes';
 
 export const AppRouter = () => {
 const [checking, setchecking] = useState(true) //chequea si esta logeado o no el usuario en la base de datos, poniendo una bandera, en el caso de que esté loguado o no, muestra a que pantalla se va a redirigir al cliente. y en el mientras tanto no muestra nada. solo una pantalla de espera
@@ -18,14 +19,16 @@ const [isLoggedIn, setisLoggedIn] = useState(false) // con este useState nos fij
 const dispatch = useDispatch();
 
     useEffect(() => {
-        firebase.auth().onAuthStateChanged( (user) => {
+        firebase.auth().onAuthStateChanged( async (user) => { //se usa el async porque es una promesa, está esperando a que de la base de datos traiga la informacion de las notas
             if ( user?.uid ) {
-                dispatch( login(user.uid, user.displayName));
+                dispatch( login( user.uid, user.displayName ) );
                 setisLoggedIn ( true );
+                
+                dispatch( startLoadingNotes( user.uid ) );
             } else {
                 setisLoggedIn ( false )
             }
-            setchecking ( false ) ;
+            setchecking ( false ) ; 
         });
     }, [dispatch, setchecking, setisLoggedIn]) 
 

@@ -1,26 +1,48 @@
-import React from 'react'
+import React from 'react';
+import moment from 'moment';
+import {useDispatch} from 'react-redux';
+import { activeNote } from '../actions/notes';
 
-export const JournalEntry = () => {
+
+export const JournalEntry = ({id, date, title, body, url}) => {
+
+
+    const noteDate = moment(date);
+    
+    const dispatch = useDispatch(activeNote);//hace dispatch de la accion activeNote
+    
+    const handleEntryClick = () => {
+        dispatch ( activeNote (id, {date, title, body, url //maneja el evento click sobre alguna de las entradas del journal, activando su edicion
+        }) 
+        );
+    }
+
     return (
-        <div className="journal__entry pointer">
+        <div className="journal__entry pointer"
+        onClick = { handleEntryClick }>
+            
+            { 
+            url && //esta condicion indica que si existe una URL con una imagen se mostrará, sino esa parte no va a mostrarse
+            
             <div 
                 className="journal__entry-picture"
                 style={{
                     BackgroundSize: 'cover',
-                    backgroundImage:'url(https://earthsky.org/upl/2018/12/comet-wirtanen-Jack-Fusco-dec-2018-Anza-Borrego-desert-CA-e1544613895713.jpg)'
+                    backgroundImage:`url(${url})`,
                 }}
             ></div>
+            }
                 <div className="journal__entry-body">
                     <p className="journal__entry-title">
-                        un nuevo dia
+                        {title}
                     </p>
                     <p className="journal__entry-content">
-                        un texto random asdfasdfasdfasdfasdfasdfasdfasdf
+                        {body}
                     </p>
                 </div>
                 <div className="journal__entry-date-box">
-                    <span>Monday</span>
-                    <h4>24</h4>
+                    <span>{noteDate.format('dddd')}</span> {/* formatos de moment.js que se pueden ver en la documentacion https://momentjs.com/docs/#/displaying/format/ */}
+                    <h4>{noteDate.format('Do')}</h4>
 
                 </div>
 
